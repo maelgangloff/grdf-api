@@ -1,0 +1,930 @@
+openapi: 3.0.3
+info:
+  title: GRDF API
+  description: Tentative de définition de l'API de GRDF
+  version: 1.0.0
+tags:
+  - name: PCE
+    description: Informations sur les compteurs
+  - name: User
+    description: Informations sur l'utilisateur
+servers:
+  - url: https://monespace.grdf.fr/api
+paths:
+  /e-conso/pce:
+    get:
+      tags: [ PCE ]
+      summary: Liste des compteurs accessibles
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pce'
+
+  /e-conso/pce/details:
+    get:
+      tags: [ PCE ]
+      summary: Informations très précises sur les compteurs et leur raccordement
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pce'
+
+  /e-conso/pce/{pceId}/adresse:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [ PCE ]
+      summary: Localisation précise du compteur
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adressePCE'
+
+  /e-conso/pce/{pceId}/details:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [ PCE ]
+      summary: Informations détaillées du compteur
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pce'
+
+  /e-conso/pce/{pceId}/coefficient-profil-mensuel:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [ PCE ]
+      summary: coefficient-profil-mensuel
+      responses:
+        200:
+          description: successful operation
+
+  /e-conso/pce/{pceId}/consommation-anuelle-reference:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [ PCE ]
+      summary: consommation-anuelle-reference
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/consommationRef'
+
+  /e-conso/pce/{pceId}/meteo:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dateFinPeriode
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: nbJour
+        in: query
+        required: false
+        schema:
+          type: number
+    get:
+      tags: [ PCE ]
+      summary: Température moyenne
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/meteo'
+
+
+
+  /e-conso/pce/consommation/informatives:
+    parameters:
+      - name: dateDebut
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: dateFin
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: pceList
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+
+    get:
+      tags: [ PCE ]
+      summary: Relevés les plus précis à titre d'information
+      responses:
+        200:
+          description: successful operation
+
+  /e-conso/pce/consommation/publiees:
+    parameters:
+      - name: dateDebut
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: dateFin
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: pceList
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+    get:
+      tags: [ PCE ]
+      summary: Relevés transmis au fournisseur d'énergie
+      responses:
+        200:
+          description: successful operation
+
+  /e-connexion/users/whoami:
+    get:
+      tags: [ User ]
+      summary: Informations sur l'utilisateur connecté
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+  /e-connexion/users/pce/historique-consultation:
+    get:
+      tags: [ User ]
+      summary: Date de la dernière consultation
+      responses:
+        200:
+          description: successful operation
+    put:
+      tags: [ User ]
+      summary: Mise à jour de la date de dernière consultation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isResponseAll:
+                  type: boolean
+                numPce:
+                  type: string
+      responses:
+        200:
+          description: successful operation
+
+  /e-connexion/user-accreditations:
+    get:
+      summary: Liste des accréditations possédées
+      tags: [ User ]
+      responses:
+        200:
+          description: successful operation
+
+  /e-connexion/user-accreditations/{pceId}:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      tags: [ User ]
+      summary: Mise à jour de l'alias du PCE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alias:
+                  type: string
+                role:
+                  type: string
+      responses:
+        200:
+          description: successful operation
+
+  /e-conso/pce/{pceId}:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      tags: [ PCE ]
+      summary: Mise à jour de l'alias du PCE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alias:
+                  type: string
+                role:
+                  type: string
+      responses:
+        200:
+          description: successful operation
+
+  /e-connexion/user-compensations:
+    parameters:
+      - name: pce
+        in: query
+        required: true
+        schema:
+          type: string
+    get:
+      summary: user-compensations
+      tags: [ User ]
+      responses:
+        200:
+          description: successful operation
+
+  /e-conso/pce/{pceId}/seuils:
+    parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [ PCE ]
+      parameters:
+        - name: frequence
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/seuils'
+        404:
+          description: Not found
+    post:
+      tags: [ PCE ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/seuils'
+      responses:
+        201:
+          description: seuil créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/seuils'
+    put:
+      tags: [ PCE ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/seuils'
+      responses:
+        204:
+          description: seuil modifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/seuils'
+
+  /e-connexion/users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags: [ User ]
+      summary: Informations sur l'utilisateur
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+    put:
+      tags: [ User ]
+      summary: Mise à jour des données de l'utilisateur
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userPut'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+
+components:
+  schemas:
+    meteo:
+      type: object
+      additionalProperties:
+        type: string
+      example:
+        2021-12-14: 2.5865454434
+        2021-12-15: 2.5865454434
+        2021-12-16: 2.5865454434
+        2021-12-17: 2.5865454434
+        2021-12-18: 2.5865454434
+
+    consommationRef:
+      type: object
+      properties:
+        id:
+          type: number
+        consommationType:
+          type: string
+        profile:
+          type: string
+        tranche:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            min:
+              type: number
+            max:
+              type: number
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+            __initializer__:
+              type: object
+              nullable: true
+            __cloner__:
+              type: object
+              nullable: true
+            __isInitialized__:
+              type: boolean
+        stationMeteo:
+          type: object
+          properties:
+            code:
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+            __initializer__:
+              type: object
+              nullable: true
+            __cloner__:
+              type: object
+              nullable: true
+            __isInitialized__:
+              type: boolean
+        annee:
+          type: number
+        mois1:
+          type: string
+        mois2:
+          type: string
+        mois3:
+          type: string
+        mois4:
+          type: string
+        mois5:
+          type: string
+        mois6:
+          type: string
+        mois7:
+          type: string
+        mois8:
+          type: string
+        mois9:
+          type: string
+        mois10:
+          type: string
+        mois11:
+          type: string
+        mois12:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+
+    adressePCE:
+      type: object
+      properties:
+        adresse:
+          type: object
+          properties:
+            adressePostale:
+              type: object
+              properties:
+                complementLocal:
+                  type: object
+                  properties:
+                    batiment:
+                      type: string
+                numVoie:
+                  type: string
+                nomVoie:
+                  type: string
+                codePostal:
+                  type: string
+                localite:
+                  type: object
+                  properties:
+                    codeINSEELocalite:
+                      type: string
+                    libelleLocalite:
+                      type: string
+    source:
+      type: string
+    pce:
+      type: object
+      properties:
+        idObject:
+          type: string
+        typeObject:
+          type: string
+        role:
+          type: string
+        alias:
+          type: string
+        teleReleve:
+          type: string
+        pce:
+          type: string
+        dateActivation:
+          type: string
+        frequenceReleve:
+          type: string
+        mhs:
+          type: string
+        etat:
+          type: string
+        datePremiereAccreditation:
+          type: string
+        nomTitulaire:
+          type: string
+        donneesEnrichissement:
+          type: array
+          items:
+            anyOf:
+              - type: array
+                items:
+                  type: object
+                  properties:
+                    accessibilite:
+                      type: string
+                    Compteur:
+                      type: object
+                      properties:
+                        matricule:
+                          type: string
+                        code:
+                          type: string
+                        nombreRoues:
+                          type: number
+                        debit:
+                          type: string
+                        situation:
+                          type: string
+                    pressionAlimentation:
+                      type: string
+                    natureDuGaz:
+                      type: string
+                    Branchement:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        etat:
+                          type: string
+                        robinetGaz:
+                          type: string
+                    dateDemarageContrat:
+                      type: string
+                    typeEmetteurGazpar:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        libelle:
+                          type: string
+                    tigeCuisine:
+                      type: string
+                    avertissementLibre:
+                      type: string
+                    source:
+                      type: string
+              - type: array
+                items:
+                  oneOf:
+                    - type: object
+                      properties:
+                        identifiantPCE:
+                          type: string
+                        statutContrat:
+                          type: string
+                        numeroCompteContrat:
+                          type: string
+                        nomClient:
+                          type: string
+                        segmentClient:
+                          type: string
+                        releve:
+                          type: object
+                          properties:
+                            frequence:
+                              type: string
+                            etatTeleReleve:
+                              type: object
+                              properties:
+                                codeEtat:
+                                  type: string
+                                etat:
+                                  type: string
+                        tarifAcheminement:
+                          type: string
+                        regimeProprietes:
+                          type: object
+                          properties:
+                            compteur:
+                              type: string
+                        fournisseur:
+                          type: object
+                          properties:
+                            nom:
+                              type: string
+                            identifiantCAD:
+                              type: string
+                        CAR_Actuelle:
+                          type: object
+                          properties:
+                            valeur:
+                              type: number
+                            type:
+                              type: string
+                        ProfilActuel:
+                          type: object
+                          properties:
+                            valeur:
+                              type: string
+                            dateDebut:
+                              type: string
+                              format: date
+                            dateFin:
+                              type: string
+                              format: date
+                        CAR_Future:
+                          type: object
+                          properties:
+                            valeur:
+                              type: number
+                            type:
+                              type: string
+                        ProfilFutur:
+                          type: object
+                          properties:
+                            valeur:
+                              type: string
+                        PITD:
+                          type: object
+                          properties:
+                            identifiant:
+                              type: string
+                            libelle:
+                              type: string
+                        CLD:
+                          type: object
+                          properties:
+                            numeroSAP:
+                              type: string
+                        identifiantPDLA:
+                          type: string
+                        dateSituationContractuellePCE:
+                          type: object
+                          properties:
+                            datePremiereMES:
+                              type: string
+                            dateDerniereMES:
+                              type: string
+                        partenaireDO:
+                          type: object
+                          properties:
+                            nom:
+                              type: string
+                        partenairePayeur:
+                          type: object
+                          properties:
+                            nom:
+                              type: string
+                        source:
+                          type: string
+                    - type: object
+                      properties:
+                        diagnosticQualite:
+                          type: boolean
+                        source:
+                          type: string
+          nullable: true
+        mes:
+          type: string
+        adresse:
+          type: object
+          nullable: true
+          properties:
+            numVoie:
+              type: string
+            nomVoie:
+              type: string
+            codePostal:
+              type: string
+            localite:
+              type: object
+              nullable: true
+            complement:
+              type: string
+            fullAddress:
+              type: string
+        donneeTechnique:
+          type: object
+          nullable: true
+        contrat:
+          nullable: true
+          type: object
+          properties:
+            tarifAcheminement:
+              type: string
+            fournisseur:
+              type: string
+            car:
+              type: number
+            idPitd:
+              type: string
+            libellePitd:
+              type: string
+            profil:
+              type: string
+            dateDebutProfil:
+              type: string
+            dateFinProfil:
+              type: string
+            proprieteCompteur:
+              type: string
+            convertisseur:
+              type: string
+              nullable: true
+            detendeur:
+              type: string
+              nullable: true
+            enregistreur:
+              type: string
+              nullable: true
+            missionInteretGeneral:
+              type: string
+              nullable: true
+        codePostal:
+          type: string
+        dateDerniereVerification:
+          type: string
+    seuils:
+      type: object
+      properties:
+        frequence:
+          type: string
+        id:
+          type: integer
+          nullable: true
+        idSouscriptionAssocier:
+          type: integer
+          nullable: true
+        notification:
+          type: object
+          properties:
+            dateDebut:
+              type: string
+              format: date
+            dateFin:
+              type: string
+              format: date
+            mail:
+              type: boolean
+            modeNotifReceived:
+              type: string
+              nullable: true
+            notifierApresSeuil:
+              type: boolean
+            notifierAvantSeuil:
+              type: boolean
+            sms:
+              type: boolean
+        pce:
+          type: string
+          nullable: true
+        pourcentage:
+          type: integer
+        seuils:
+          type: array
+          items:
+            type: object
+            properties:
+              annee:
+                type: integer
+              mois:
+                type: integer
+              valeur:
+                type: number
+    user:
+      type: object
+      properties:
+        id:
+          type: number
+        type:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        sofit_id:
+          type: string
+        profile:
+          type: string
+        espace:
+          type: object
+          properties:
+            id:
+              type: number
+            mobile_phone:
+              type: string
+            validated_mobile_phone:
+              type: string
+              nullable: true
+            mobile_phone_expiration_date:
+              type: string
+              nullable: true
+            home_phone:
+              type: string
+            notification_info_coupure_sms:
+              type: boolean
+            notification_info_coupure_email:
+              type: boolean
+            adresse:
+              type: object
+              properties:
+                id:
+                  type: number
+                nom_voie:
+                  type: string
+                  nullable: true
+                complement:
+                  type: string
+                  nullable: true
+                code_postal:
+                  type: string
+                  nullable: true
+                ville:
+                  type: string
+                  nullable: true
+            rev:
+              type: string
+              nullable: true
+            status:
+              type: string
+              nullable: true
+            accept_be_contacted:
+              type: string
+            accept_collect_info:
+              type: string
+            accept_be_contacted_updated_at:
+              type: string
+            accept_collect_info_updated_at:
+              type: string
+            last_login:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    userPut:
+      type: object
+      properties:
+        id:
+          type: number
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        rev:
+          type: string
+        sofit_id:
+          type: string
+        type:
+          type: string
+        espace:
+          type: object
+          properties:
+            id:
+              type: number
+            discr:
+              type: string
+            mobile_phone:
+              type: string
+            home_phone:
+              type: string
+            adresse:
+              type: object
+              properties:
+                id:
+                  type: number
+                nom_voie:
+                  type: string
+                code_postal:
+                  type: string
+                ville:
+                  type: string
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth_token
+security:
+  - cookieAuth: [ ]
