@@ -7,19 +7,29 @@ Support non-officiel de l'API GRDF
 
 * [GRDF](#GRDF)
     * [new GRDF(token)](#new_GRDF_new)
-    * [.getUserInfo()](#GRDF+getUserInfo) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
-    * [.getUserDetails(id)](#GRDF+getUserDetails) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
-    * [.putUserDetails(id, userInfoDetails)](#GRDF+putUserDetails) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
-    * [.getConsultationHistory()](#GRDF+getConsultationHistory) ⇒ <code>Promise.&lt;Array.&lt;HistoriqueConsultation&gt;&gt;</code>
-    * [.getPCEList()](#GRDF+getPCEList) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
-    * [.getPCEAddress(pce)](#GRDF+getPCEAddress) ⇒ <code>Promise.&lt;Adresse&gt;</code>
-    * [.getPCEDetails(pce)](#GRDF+getPCEDetails) ⇒ <code>Promise.&lt;PCE&gt;</code>
-    * [.getPCEDetailsPlus()](#GRDF+getPCEDetailsPlus) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
-    * [.getPCECoefficient(pce)](#GRDF+getPCECoefficient) ⇒ <code>Promise.&lt;PCECoefficient&gt;</code>
-    * [.getPCEMeteo(pce, dateFinPeriode, nbJour)](#GRDF+getPCEMeteo) ⇒
-    * [.getPCEConsoRef(pce)](#GRDF+getPCEConsoRef) ⇒ <code>Promise.&lt;Array.&lt;ConsommationReference&gt;&gt;</code>
-    * [.getPCEConsumption(type, pceList, dateDebut, dateFin)](#GRDF+getPCEConsumption) ⇒ <code>Promise.&lt;Consommation&gt;</code>
-    * [.getConsumptionSheet(type, pceList, frequence, dateDebut, dateFin)](#GRDF+getConsumptionSheet) ⇒ <code>Promise.&lt;stream&gt;</code>
+    * _instance_
+        * [.getPCEList()](#GRDF+getPCEList) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
+        * [.getPCEAddress(pce)](#GRDF+getPCEAddress) ⇒ <code>Promise.&lt;Adresse&gt;</code>
+        * [.getPCEDetails(pce)](#GRDF+getPCEDetails) ⇒ <code>Promise.&lt;PCE&gt;</code>
+        * [.getPCEDetailsPlus()](#GRDF+getPCEDetailsPlus) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
+        * [.getPCECoefficient(pce)](#GRDF+getPCECoefficient) ⇒ <code>Promise.&lt;PCECoefficient&gt;</code>
+        * [.getPCEMeteo(pce, dateFinPeriode, nbJour)](#GRDF+getPCEMeteo) ⇒
+        * [.getPCEConsoRef(pce)](#GRDF+getPCEConsoRef) ⇒ <code>Promise.&lt;Array.&lt;ConsommationReference&gt;&gt;</code>
+        * [.getPCEConsumption(type, pceList, dateDebut, dateFin)](#GRDF+getPCEConsumption) ⇒ <code>Promise.&lt;Consommation&gt;</code>
+        * [.getConsumptionSheet(type, pceList, frequence, dateDebut, dateFin)](#GRDF+getConsumptionSheet) ⇒ <code>Promise.&lt;stream&gt;</code>
+        * [.putPCE(pce, partialPCE)](#GRDF+putPCE) ⇒ <code>Promise.&lt;PCE&gt;</code>
+        * [.getPCESeuils(pce, frequence)](#GRDF+getPCESeuils) ⇒ <code>Promise.&lt;Seuils&gt;</code>
+        * [.postPCESeuils(pce, seuils)](#GRDF+postPCESeuils) ⇒ <code>Promise.&lt;SeuilsCreated&gt;</code>
+        * [.putPCESeuils(pce, seuils)](#GRDF+putPCESeuils) ⇒ <code>Promise.&lt;Seuils&gt;</code>
+        * [.getUserInfo()](#GRDF+getUserInfo) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
+        * [.getUserDetails(id)](#GRDF+getUserDetails) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
+        * [.putUserDetails(id, userInfoDetails)](#GRDF+putUserDetails) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
+        * [.getConsultationHistory()](#GRDF+getConsultationHistory) ⇒ <code>Promise.&lt;Array.&lt;HistoriqueConsultation&gt;&gt;</code>
+        * [.putConsultationHistory(data)](#GRDF+putConsultationHistory)
+        * [.getUserAccreditation()](#GRDF+getUserAccreditation) ⇒ <code>Promise.&lt;Array.&lt;Accreditation&gt;&gt;</code>
+        * [.putUserAccreditation(pce, partialPCE)](#GRDF+putUserAccreditation) ⇒ <code>Promise.&lt;PCE&gt;</code>
+    * _static_
+        * [.login(email, password)](#GRDF.login) ⇒ <code>Promise.&lt;string&gt;</code>
 
 <a name="new_GRDF_new"></a>
 
@@ -39,41 +49,6 @@ GRDF.login('email', 'password').then(async token => {
     console.log(consommation[pce].releves)
 })
 ```
-<a name="GRDF+getUserInfo"></a>
-
-### grdF.getUserInfo() ⇒ <code>Promise.&lt;UserInfo&gt;</code>
-Informations générales sur l'utilisateur connecté
-
-**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
-<a name="GRDF+getUserDetails"></a>
-
-### grdF.getUserDetails(id) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
-Détails sur un utilisateur
-
-**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>number</code> | Identifiant de l'utilisateur |
-
-<a name="GRDF+putUserDetails"></a>
-
-### grdF.putUserDetails(id, userInfoDetails) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
-Mise à jour du profil de l'utilisateur
-
-**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>number</code> | Identifiant de l'utilisateur |
-| userInfoDetails | <code>UserInfoDetails</code> | Les informations de l'utilisateur à modifier |
-
-<a name="GRDF+getConsultationHistory"></a>
-
-### grdF.getConsultationHistory() ⇒ <code>Promise.&lt;Array.&lt;HistoriqueConsultation&gt;&gt;</code>
-Historique de consultation des informations du PCE
-
-**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
 <a name="GRDF+getPCEList"></a>
 
 ### grdF.getPCEList() ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
@@ -165,7 +140,132 @@ Stream d'une feuille de calcul déjà formatée contenant les relevés
 | --- | --- | --- |
 | type | <code>ConsommationType</code> | `informatives`: les plus détaillés, `publiees`: destinées à la facturation |
 | pceList | <code>Array.&lt;string&gt;</code> | Liste des numéros de PCE |
-| frequence | <code>Frequency</code> | Fréquence des relevés (`Mensuel`, `Hebdomadaire`, `Journalier`, `Horaire`) |
+| frequence | <code>Frequency</code> | Fréquence des relevés (`Mensuel`|`Hebdomadaire`|`Journalier`|`Horaire`) |
 | dateDebut | <code>string</code> | Date de début au format YYYY-MM-DD |
 | dateFin | <code>string</code> | Date de fin au format YYYY-MM-DD |
+
+<a name="GRDF+putPCE"></a>
+
+### grdF.putPCE(pce, partialPCE) ⇒ <code>Promise.&lt;PCE&gt;</code>
+Effectuer des changements sur le PCE (changement de l'alias par exemple)
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Numéro du PCE |
+| partialPCE |  | Informations à remplacer dans la description du PCE |
+
+<a name="GRDF+getPCESeuils"></a>
+
+### grdF.getPCESeuils(pce, frequence) ⇒ <code>Promise.&lt;Seuils&gt;</code>
+Liste des seuils programmés
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Numéro du PCE |
+| frequence | <code>Frequency</code> | Type de seuil (`Journalier`|`Mensuel`|`Annuel`) |
+
+<a name="GRDF+postPCESeuils"></a>
+
+### grdF.postPCESeuils(pce, seuils) ⇒ <code>Promise.&lt;SeuilsCreated&gt;</code>
+Remplacer les seuils
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Numéro du PCE |
+| seuils | <code>Seuils</code> | Seuils à poster |
+
+<a name="GRDF+putPCESeuils"></a>
+
+### grdF.putPCESeuils(pce, seuils) ⇒ <code>Promise.&lt;Seuils&gt;</code>
+Modifier un seuil (préciser les identifiants)
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Numéro du PCE |
+| seuils | <code>Seuils</code> | Seuils à muter |
+
+<a name="GRDF+getUserInfo"></a>
+
+### grdF.getUserInfo() ⇒ <code>Promise.&lt;UserInfo&gt;</code>
+Informations générales sur l'utilisateur connecté
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+<a name="GRDF+getUserDetails"></a>
+
+### grdF.getUserDetails(id) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
+Détails sur un utilisateur
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | Identifiant de l'utilisateur |
+
+<a name="GRDF+putUserDetails"></a>
+
+### grdF.putUserDetails(id, userInfoDetails) ⇒ <code>Promise.&lt;UserInfo&gt;</code>
+Mise à jour du profil de l'utilisateur
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | Identifiant de l'utilisateur |
+| userInfoDetails | <code>UserInfoDetails</code> | Les informations de l'utilisateur à modifier |
+
+<a name="GRDF+getConsultationHistory"></a>
+
+### grdF.getConsultationHistory() ⇒ <code>Promise.&lt;Array.&lt;HistoriqueConsultation&gt;&gt;</code>
+Historique de consultation des informations des PCE
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+<a name="GRDF+putConsultationHistory"></a>
+
+### grdF.putConsultationHistory(data)
+Mise à jour de la date de dernière consultation du PCE
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type |
+| --- | --- |
+| data | <code>HistoriqueConsultationRequest</code> | 
+
+<a name="GRDF+getUserAccreditation"></a>
+
+### grdF.getUserAccreditation() ⇒ <code>Promise.&lt;Array.&lt;Accreditation&gt;&gt;</code>
+Liste des accreditations demandées
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+<a name="GRDF+putUserAccreditation"></a>
+
+### grdF.putUserAccreditation(pce, partialPCE) ⇒ <code>Promise.&lt;PCE&gt;</code>
+Mise à jour de l'accréditation (changement de l'alias par exemple)
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Numéro du PCE |
+| partialPCE |  |  |
+
+<a name="GRDF.login"></a>
+
+### GRDF.login(email, password) ⇒ <code>Promise.&lt;string&gt;</code>
+Obtention d'un jeton d'accès auprès de l'API
+
+**Kind**: static method of [<code>GRDF</code>](#GRDF)  
+**Returns**: <code>Promise.&lt;string&gt;</code> - Le jeton d'accès  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| email | <code>string</code> | Courriel de connexion de l'utilisateur |
+| password | <code>string</code> | Mot de passe |
 

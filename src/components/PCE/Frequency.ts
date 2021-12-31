@@ -2,5 +2,6 @@ export enum Frequency {
   HOURLY = 'Horaire',
   DAILY = 'Journalier',
   WEEKLY = 'Hebdomadaire',
-  MONTHLY = 'Mensuel'
+  MONTHLY = 'Mensuel',
+  YEARLY = 'Annuel'
 }

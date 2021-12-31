@@ -126,7 +126,7 @@ paths:
         in: query
         required: false
         schema:
-          type: number
+          type: integer
     get:
       tags: [ PCE ]
       summary: Température moyenne
@@ -314,6 +314,7 @@ paths:
       tags: [ PCE ]
       parameters:
         - name: frequence
+          required: true
           in: query
           schema:
             type: string
@@ -339,7 +340,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/seuils'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  idSouscriptionAssocier:
+                    type: integer
     put:
       tags: [ PCE ]
       requestBody:
@@ -406,7 +412,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
         consommationType:
           type: string
         profile:
@@ -415,7 +421,7 @@ components:
           type: object
           properties:
             id:
-              type: number
+              type: integer
             name:
               type: string
             min:
@@ -452,7 +458,7 @@ components:
             __isInitialized__:
               type: boolean
         annee:
-          type: number
+          type: integer
         mois1:
           type: string
         mois2:
@@ -796,7 +802,7 @@ components:
           type: string
           nullable: true
         pourcentage:
-          type: integer
+          type: number
         seuils:
           type: array
           items:
@@ -812,7 +818,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
         type:
           type: string
         first_name:
@@ -829,7 +835,7 @@ components:
           type: object
           properties:
             id:
-              type: number
+              type: integer
             mobile_phone:
               type: string
             validated_mobile_phone:
@@ -848,7 +854,7 @@ components:
               type: object
               properties:
                 id:
-                  type: number
+                  type: integer
                 nom_voie:
                   type: string
                   nullable: true
@@ -885,7 +891,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
         first_name:
           type: string
         last_name:
@@ -902,7 +908,7 @@ components:
           type: object
           properties:
             id:
-              type: number
+              type: integer
             discr:
               type: string
             mobile_phone:
@@ -913,7 +919,7 @@ components:
               type: object
               properties:
                 id:
-                  type: number
+                  type: integer
                 nom_voie:
                   type: string
                 code_postal:
