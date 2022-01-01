@@ -289,7 +289,7 @@ export class GRDF {
         validateStatus: status => status === 302
       })).headers['set-cookie']?.find(c => c.startsWith('auth_token'))?.split(';')[0].split('=')[1]
       if (token !== undefined) {
-        (new GRDF(token).getUserInfo()).catch(() => {})
+        await new GRDF(token).getUserInfo().catch(e => e)
         return token
       }
     }
