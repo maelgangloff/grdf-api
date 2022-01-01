@@ -84,11 +84,11 @@ export class GRDF {
   /**
      * @param {string} pce Numéro du PCE
      * @param {string} dateFinPeriode Date de fin au format YYYY-MM-DD
-     * @param {number} nbJour Nombre de jour
+     * @param {number} nbJours Nombre de jours
      * @return Objet dont les clés sont les dates et les valeurs sont les températures associées
      */
-  public async getPCEMeteo (pce: string, dateFinPeriode: string, nbJour: number): Promise<{ [date: string]: number }> {
-    return await this.request(`/e-conso/pce/${pce}/meteo?${qs.stringify({ dateFinPeriode, nbJour })}`)
+  public async getPCEMeteo (pce: string, dateFinPeriode: string, nbJours: number): Promise<{ [date: string]: number }> {
+    return await this.request(`/e-conso/pce/${pce}/meteo?${qs.stringify({ dateFinPeriode, nbJours })}`)
   }
 
   /**
