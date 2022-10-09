@@ -1,6 +1,6 @@
 {
   "name": "grdf-api",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "author": {
@@ -35,7 +35,9 @@
   ],
   "description": "Unofficial API client of GRDF",
   "dependencies": {
+    "@types/node-fetch": "^2.6.2",
     "axios": "^0.24.0",
+    "node-fetch": "2.0",
     "qs": "^6.10.2"
   }
 }

@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import qs from 'qs'
+import fetch from 'node-fetch'
 import AuthResponse from './components/Auth/AuthResponse'
 import { UserInfo } from './components/User/UserInfo'
 import { UserInfoDetails } from './components/User/UserInfoDetails'
@@ -248,6 +249,7 @@ export class GRDF {
       url: endpoint,
       ...axiosConfig,
       headers: {
+        domain: 'grdf.fr',
         Cookie: `auth_token=${this.token}`
       }
     })
@@ -263,31 +265,34 @@ export class GRDF {
      * @return {Promise<string>} Le jeton d'accès
      */
   public static async login (email: string, password: string): Promise<string> {
-    const authReq = (await axios.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', qs.stringify({
+    const client = axios.create({withCredentials: true})
+    const authReq = (await client.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', qs.stringify({
       email,
       password,
       capp: 'meg',
-      goto: `https://sofa-connexion.grdf.fr/openam/oauth2/externeGrdf/authorize?${qs.stringify({
-                response_type: 'code',
-                scope: 'openid profile email infotravaux /v1/accreditation /v1/accreditations /digiconso/v1 /digiconso/v1/consommations new_meg',
-                client_id: 'prod_espaceclient',
-                state: 0,
-                redirect_uri: 'https://monespace.grdf.fr/_codexch',
-                nonce: 'skywsNPCVa-AeKo1Rps0HjMVRNbUqA46j7XYA4tImeI',
-                by_pass_okta: 1,
-                capp: 'meg'
-            })}`
-    })))
+      goto: `https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write%20%2Fdigiraccob2c%2Fv1&client_id=prod_espaceclient&state=%2Fconnexion&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=Ej-Z6hSFJtYgp9CVHJ7bGtkgWuc5WWmD5du3sGjeJZ0&by_pass_okta=1&capp=meg`
+    }), {
+      headers: {
+        domain: 'grdf.fr'
+      }
+    }))
 
     const { redirectUrl, displayCaptcha, state, actualLockoutDuration } = authReq.data as AuthResponse
-
     if (!displayCaptcha && state === 'SUCCESS' && actualLockoutDuration === 0 && redirectUrl !== undefined) {
-      const token = (await axios.get(redirectUrl, {
+      const cookieSofit = authReq.headers['set-cookie']?.find(c => c.startsWith('CookieSofit'))?.split(';')[0]
+
+      const authorizeReq = await fetch(redirectUrl, {
         headers: {
-          Cookie: authReq.headers['set-cookie']?.find(c => c.startsWith('iPlanetDirectoryPro'))?.split(';')[0] ?? ''
+          'Cookie': cookieSofit ?? ''
         },
-        validateStatus: status => status === 302
-      })).headers['set-cookie']?.find(c => c.startsWith('auth_token'))?.split(';')[0].split('=')[1]
+        redirect: 'manual'
+      })
+
+      const codexchUrl = authorizeReq.headers.get('location')
+      if(codexchUrl === null) throw new Error("Impossible d'obtenir l'url de redirection pour obtenir le jeton.")
+      const codexchReqCookies = (await fetch(codexchUrl, {redirect: 'manual'})).headers.get('set-cookie')
+      if(codexchReqCookies === null) throw new Error('Impossible de traiter le cookie de connexion.')
+      const token = codexchReqCookies.split(';').find(c => c.startsWith('auth_token'))?.split('=')[1]
       if (token !== undefined) {
         await new GRDF(token).getUserInfo().catch(e => e)
         return token
