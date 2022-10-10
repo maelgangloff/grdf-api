@@ -129,7 +129,7 @@ export class GRDF {
    * @example ```js
    * const { GRDF, ConsommationType, Frequency } = require('grdf-api');
    * const fs = require('fs');
-   * 
+   *
    * const pce = '01234567890123';
    * GRDF.login('email', 'password').then(async token => {
    *     const user = new GRDF(token);
