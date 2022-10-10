@@ -66,7 +66,7 @@ Adresse d'un PCE spécifique
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 
 <a name="GRDF+getPCEDetails"></a>
 
@@ -77,7 +77,7 @@ Détails d'un PCE
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 
 <a name="GRDF+getPCEDetailsPlus"></a>
 
@@ -94,7 +94,7 @@ Informations les plus détaillées sur les PCE associés à l'utilisateur
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 
 <a name="GRDF+getPCEMeteo"></a>
 
@@ -104,7 +104,7 @@ Informations les plus détaillées sur les PCE associés à l'utilisateur
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 | dateFinPeriode | <code>string</code> | Date de fin au format YYYY-MM-DD |
 | nbJours | <code>number</code> | Nombre de jours |
 
@@ -117,7 +117,7 @@ Consommation annuelle de référence
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 
 <a name="GRDF+getPCEConsumption"></a>
 
@@ -148,6 +148,18 @@ Stream d'une feuille de calcul déjà formatée contenant les relevés
 | dateDebut | <code>string</code> | Date de début au format YYYY-MM-DD |
 | dateFin | <code>string</code> | Date de fin au format YYYY-MM-DD |
 
+**Example**  
+```js
+const { GRDF, ConsommationType, Frequency } = require('grdf-api');
+const fs = require('fs');
+
+const pce = '01234567890123';
+GRDF.login('email', 'password').then(async token => {
+    const user = new GRDF(token);
+    const stream = fs.createWriteStream('./sheet.xlsx');
+    (await user.getConsumptionSheet(ConsommationType.informatives, [pce], Frequency.WEEKLY, '2022-06-01', '2022-10-10')).pipe(stream);
+})
+```
 <a name="GRDF+putPCE"></a>
 
 ### grdF.putPCE(pce, partialPCE) ⇒ <code>Promise.&lt;PCE&gt;</code>
@@ -157,7 +169,7 @@ Effectuer des changements sur le PCE (changement de l'alias par exemple)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 | partialPCE |  | Informations à remplacer dans la description du PCE |
 
 <a name="GRDF+getPCESeuils"></a>
@@ -169,7 +181,7 @@ Liste des seuils programmés
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 | frequence | <code>Frequency</code> | Type de seuil (`Journalier`|`Mensuel`|`Annuel`) |
 
 <a name="GRDF+postPCESeuils"></a>
@@ -181,7 +193,7 @@ Remplacer les seuils
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 | seuils | <code>Seuils</code> | Seuils à poster |
 
 <a name="GRDF+putPCESeuils"></a>
@@ -193,7 +205,7 @@ Modifier un seuil (préciser les identifiants)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 | seuils | <code>Seuils</code> | Seuils à muter |
 
 <a name="GRDF+getUserInfo"></a>
@@ -257,7 +269,7 @@ Mise à jour de l'accréditation (changement de l'alias par exemple)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| pce | <code>string</code> | Numéro du PCE |
+| pce | <code>string</code> | Identifiant du PCE |
 | partialPCE |  |  |
 
 <a name="GRDF+getInfoLogements"></a>

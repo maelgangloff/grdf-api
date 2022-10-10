@@ -126,6 +126,17 @@ export class GRDF {
    * @param {Frequency} frequence Fréquence des relevés (`Mensuel`|`Hebdomadaire`|`Journalier`|`Horaire`)
    * @param {string} dateDebut Date de début au format YYYY-MM-DD
    * @param {string} dateFin Date de fin au format YYYY-MM-DD
+   * @example ```js
+   * const { GRDF, ConsommationType, Frequency } = require('grdf-api');
+   * const fs = require('fs');
+   * 
+   * const pce = '01234567890123';
+   * GRDF.login('email', 'password').then(async token => {
+   *     const user = new GRDF(token);
+   *     const stream = fs.createWriteStream('./sheet.xlsx');
+   *     (await user.getConsumptionSheet(ConsommationType.informatives, [pce], Frequency.WEEKLY, '2022-06-01', '2022-10-10')).pipe(stream);
+   * })
+   * ```
    * @return {Promise<stream>}
    */
   public async getConsumptionSheet (type: ConsommationType, pceList: string[], frequence: Frequency, dateDebut: string, dateFin: string): Promise<stream> {
