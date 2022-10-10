@@ -51,7 +51,7 @@ export class GRDF {
 
   /**
    * Adresse d'un PCE spécifique
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @return {Promise<Adresse>}
    */
   public async getPCEAddress (pce: string): Promise<Adresse> {
@@ -60,7 +60,7 @@ export class GRDF {
 
   /**
    * Détails d'un PCE
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @return {Promise<PCE>}
    */
   public async getPCEDetails (pce: string): Promise<PCE> {
@@ -77,7 +77,7 @@ export class GRDF {
   }
 
   /**
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @return {Promise<PCECoefficient>}
    */
   public async getPCECoefficient (pce: string): Promise<PCECoefficient> {
@@ -85,7 +85,7 @@ export class GRDF {
   }
 
   /**
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @param {string} dateFinPeriode Date de fin au format YYYY-MM-DD
    * @param {number} nbJours Nombre de jours
    * @return Objet dont les clés sont les dates et les valeurs sont les températures associées
@@ -96,7 +96,7 @@ export class GRDF {
 
   /**
    * Consommation annuelle de référence
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @return {Promise<ConsommationReference[]>}
    */
   public async getPCEConsoRef (pce: string): Promise<ConsommationReference[]> {
@@ -139,7 +139,7 @@ export class GRDF {
 
   /**
    * Effectuer des changements sur le PCE (changement de l'alias par exemple)
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @param partialPCE Informations à remplacer dans la description du PCE
    * @return {Promise<PCE>}
    */
@@ -149,7 +149,7 @@ export class GRDF {
 
   /**
    * Liste des seuils programmés
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @param {Frequency} frequence Type de seuil (`Journalier`|`Mensuel`|`Annuel`)
    * @return {Promise<Seuils>}
    */
@@ -159,7 +159,7 @@ export class GRDF {
 
   /**
    * Remplacer les seuils
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @param {Seuils} seuils Seuils à poster
    * @return {Promise<SeuilsCreated>}
     */
@@ -169,7 +169,7 @@ export class GRDF {
 
   /**
    * Modifier un seuil (préciser les identifiants)
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @param {Seuils} seuils Seuils à muter
    * @return {Promise<Seuils>}
    */
@@ -233,7 +233,7 @@ export class GRDF {
 
   /**
    * Mise à jour de l'accréditation (changement de l'alias par exemple)
-   * @param {string} pce Numéro du PCE
+   * @param {string} pce Identifiant du PCE
    * @param partialPCE
    * @return {Promise<PCE>}
    */
@@ -271,7 +271,7 @@ export class GRDF {
         Cookie: `auth_token=${this.token}`
       }
     })
-    if (headers['content-type'].includes('text/html')) throw new Error('Useless response')
+    if (headers['content-type'].includes('text/html')) throw new Error('Useless HTML response')
     return data
   }
 
@@ -312,9 +312,9 @@ export class GRDF {
       })
 
       const codexchUrl = authorizeReq.headers.get('location')
-      if (codexchUrl === null) throw new Error("Impossible d'obtenir l'URL de redirection d'échange de jeton.")
+      if (codexchUrl === null) throw new Error('Failed to get token exchange redirect URL.')
       const codexchReqCookies = (await fetch(codexchUrl, { redirect: 'manual' })).headers.get('set-cookie')
-      if (codexchReqCookies === null) throw new Error('Impossible de traiter le cookie de connexion.')
+      if (codexchReqCookies === null) throw new Error('Unable to process login cookie.')
       const token = codexchReqCookies.split(';').find(c => c.startsWith('auth_token'))?.split('=')[1]
       if (token !== undefined) {
         await new GRDF(token).getUserInfo().catch(e => e)
