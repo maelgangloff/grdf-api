@@ -11,9 +11,9 @@ Support non-officiel de l'API GRDF
         * [.getPCEList()](#GRDF+getPCEList) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
         * [.getPCEAddress(pce)](#GRDF+getPCEAddress) ⇒ <code>Promise.&lt;Adresse&gt;</code>
         * [.getPCEDetails(pce)](#GRDF+getPCEDetails) ⇒ <code>Promise.&lt;PCE&gt;</code>
-        * [.getPCEDetailsPlus()](#GRDF+getPCEDetailsPlus) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
+        * ~~[.getPCEDetailsPlus()](#GRDF+getPCEDetailsPlus) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>~~
         * [.getPCECoefficient(pce)](#GRDF+getPCECoefficient) ⇒ <code>Promise.&lt;PCECoefficient&gt;</code>
-        * [.getPCEMeteo(pce, dateFinPeriode, nbJour)](#GRDF+getPCEMeteo) ⇒
+        * [.getPCEMeteo(pce, dateFinPeriode, nbJours)](#GRDF+getPCEMeteo) ⇒
         * [.getPCEConsoRef(pce)](#GRDF+getPCEConsoRef) ⇒ <code>Promise.&lt;Array.&lt;ConsommationReference&gt;&gt;</code>
         * [.getPCEConsumption(type, pceList, dateDebut, dateFin)](#GRDF+getPCEConsumption) ⇒ <code>Promise.&lt;Consommation&gt;</code>
         * [.getConsumptionSheet(type, pceList, frequence, dateDebut, dateFin)](#GRDF+getConsumptionSheet) ⇒ <code>Promise.&lt;stream&gt;</code>
@@ -28,6 +28,8 @@ Support non-officiel de l'API GRDF
         * [.putConsultationHistory(data)](#GRDF+putConsultationHistory)
         * [.getUserAccreditation()](#GRDF+getUserAccreditation) ⇒ <code>Promise.&lt;Array.&lt;Accreditation&gt;&gt;</code>
         * [.putUserAccreditation(pce, partialPCE)](#GRDF+putUserAccreditation) ⇒ <code>Promise.&lt;PCE&gt;</code>
+        * [.getInfoLogements()](#GRDF+getInfoLogements) ⇒ <code>Promise.&lt;Array.&lt;InfoLogement&gt;&gt;</code>
+        * [.getInfoLogementPCE()](#GRDF+getInfoLogementPCE) ⇒ <code>Promise.&lt;InfoLogement&gt;</code>
     * _static_
         * [.login(email, password)](#GRDF.login) ⇒ <code>Promise.&lt;string&gt;</code>
 
@@ -79,7 +81,9 @@ Détails d'un PCE
 
 <a name="GRDF+getPCEDetailsPlus"></a>
 
-### grdF.getPCEDetailsPlus() ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
+### ~~grdF.getPCEDetailsPlus() ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>~~
+***Deprecated***
+
 Informations les plus détaillées sur les PCE associés à l'utilisateur
 
 **Kind**: instance method of [<code>GRDF</code>](#GRDF)  
@@ -94,7 +98,7 @@ Informations les plus détaillées sur les PCE associés à l'utilisateur
 
 <a name="GRDF+getPCEMeteo"></a>
 
-### grdF.getPCEMeteo(pce, dateFinPeriode, nbJour) ⇒
+### grdF.getPCEMeteo(pce, dateFinPeriode, nbJours) ⇒
 **Kind**: instance method of [<code>GRDF</code>](#GRDF)  
 **Returns**: Objet dont les clés sont les dates et les valeurs sont les températures associées  
 
@@ -102,7 +106,7 @@ Informations les plus détaillées sur les PCE associés à l'utilisateur
 | --- | --- | --- |
 | pce | <code>string</code> | Numéro du PCE |
 | dateFinPeriode | <code>string</code> | Date de fin au format YYYY-MM-DD |
-| nbJour | <code>number</code> | Nombre de jour |
+| nbJours | <code>number</code> | Nombre de jours |
 
 <a name="GRDF+getPCEConsoRef"></a>
 
@@ -256,6 +260,18 @@ Mise à jour de l'accréditation (changement de l'alias par exemple)
 | pce | <code>string</code> | Numéro du PCE |
 | partialPCE |  |  |
 
+<a name="GRDF+getInfoLogements"></a>
+
+### grdF.getInfoLogements() ⇒ <code>Promise.&lt;Array.&lt;InfoLogement&gt;&gt;</code>
+Informations sur le logement
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+<a name="GRDF+getInfoLogementPCE"></a>
+
+### grdF.getInfoLogementPCE() ⇒ <code>Promise.&lt;InfoLogement&gt;</code>
+Informations sur le logement d'un PCE
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
 <a name="GRDF.login"></a>
 
 ### GRDF.login(email, password) ⇒ <code>Promise.&lt;string&gt;</code>

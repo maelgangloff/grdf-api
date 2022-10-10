@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface DonneesEnrichissement1 {
   accessibilite: string
   Compteur: {

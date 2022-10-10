@@ -1,6 +1,6 @@
 {
   "name": "grdf-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "author": {
@@ -13,7 +13,7 @@
     "@types/qs": "^6.9.7",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
-    "eslint": "^8.5.0",
+    "eslint": "^7.30.0",
     "jsdoc-to-markdown": "^7.1.0",
     "ts-standard": "^11.0.0",
     "typescript": "^4.5.4"

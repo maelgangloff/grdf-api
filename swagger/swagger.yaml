@@ -24,21 +24,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/pce'
-
-  /e-conso/pce/details:
-    get:
-      tags: [ PCE ]
-      summary: Informations très précises sur les compteurs et leur raccordement
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/pce'
-
+#  /e-conso/pce/details:
+#    get:
+#      tags: [ PCE ]
+#      summary: Informations très précises sur les compteurs et leur raccordement
+#      responses:
+#        200:
+#          description: successful operation
+#          content:
+#            application/json:
+#              schema:
+#                type: array
+#                items:
+#                  $ref: '#/components/schemas/pce'
   /e-conso/pce/{pceId}/adresse:
     parameters:
       - name: pceId
@@ -393,6 +391,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
+  /e-connexion/info_logement:
+    get:
+      tags: [ User ]
+      summary: Informations sur le logement
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/info_logement'
+  /e-connexion/info_logement/{pceId}:
+    get:
+      tags: [ User ]
+      summary: Informations sur le logement d'un PCE
+      parameters:
+      - name: pceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/info_logement'
 
 
 components:
@@ -729,6 +757,19 @@ components:
         donneeTechnique:
           type: object
           nullable: true
+          properties:
+            calibre:
+              nullable: true
+            nombreRoues:
+              type: string
+            debit:
+              type: string
+            pressionAval:
+              type: string
+            matricule:
+              type: string
+            code:
+              type: string
         contrat:
           nullable: true
           type: object
@@ -926,7 +967,38 @@ components:
                   type: string
                 ville:
                   type: string
-
+    info_logement:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_account:
+          type: object
+          properties:
+            id:
+              type: integer
+            created_at:
+              type: integer
+            updated_at:
+              type: integer
+        numero_pce:
+          type: string
+        statut_habitant:
+          type: string
+        type_logement:
+          type: string
+        residence:
+          type: string
+        type_chauffage:
+          type: string
+        localisation_compteur:
+          type: string
+        type_chaudiere:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
   securitySchemes:
     cookieAuth:
       type: apiKey

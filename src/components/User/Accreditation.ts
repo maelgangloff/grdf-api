@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface Accreditation {
   id_accreditation: string
   id_internaute: string

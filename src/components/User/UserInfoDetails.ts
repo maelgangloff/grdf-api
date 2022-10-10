@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface UserInfoDetails {
   id: number
   first_name: string

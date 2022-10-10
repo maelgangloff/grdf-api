@@ -14,6 +14,7 @@ import stream from 'node:stream'
 import { HistoriqueConsultation, HistoriqueConsultationRequest } from './components/User/HistoriqueConsultation'
 import { Seuils, SeuilsCreated } from './components/PCE/Seuils'
 import { Accreditation } from './components/User/Accreditation'
+import { InfoLogement } from './components/User/InfoLogement'
 
 export { Frequency }
 export { ConsommationType }
@@ -34,81 +35,82 @@ export class GRDF {
   private readonly token: string
 
   /**
-     * @param {string} token Jeton d'accès obtenu avec la méthode `GRDF.login(email, password)`
-     */
+   * @param {string} token Jeton d'accès obtenu avec la méthode `GRDF.login(email, password)`
+   */
   constructor (token: string) {
     this.token = token
   }
 
   /**
-     * Liste des PCE associés à l'utilisateur
-     * @return {Promise<PCE[]>}
-     */
+   * Liste des PCE associés à l'utilisateur
+   * @return {Promise<PCE[]>}
+   */
   public async getPCEList (): Promise<PCE[]> {
     return await this.request('/e-conso/pce')
   }
 
   /**
-     * Adresse d'un PCE spécifique
-     * @param {string} pce Numéro du PCE
-     * @return {Promise<Adresse>}
-     */
+   * Adresse d'un PCE spécifique
+   * @param {string} pce Numéro du PCE
+   * @return {Promise<Adresse>}
+   */
   public async getPCEAddress (pce: string): Promise<Adresse> {
     return await this.request(`/e-conso/pce/${pce}/adresse`)
   }
 
   /**
-     * Détails d'un PCE
-     * @param {string} pce Numéro du PCE
-     * @return {Promise<PCE>}
-     */
+   * Détails d'un PCE
+   * @param {string} pce Numéro du PCE
+   * @return {Promise<PCE>}
+   */
   public async getPCEDetails (pce: string): Promise<PCE> {
     return await this.request(`/e-conso/pce/${pce}/details`)
   }
 
   /**
-     * Informations les plus détaillées sur les PCE associés à l'utilisateur
-     * @return {Promise<PCE[]>}
-     */
+   * Informations les plus détaillées sur les PCE associés à l'utilisateur
+   * @deprecated
+   * @return {Promise<PCE[]>}
+   */
   public async getPCEDetailsPlus (): Promise<PCE[]> {
     return await this.request('/e-conso/details')
   }
 
   /**
-     * @param {string} pce Numéro du PCE
-     * @return {Promise<PCECoefficient>}
-     */
+   * @param {string} pce Numéro du PCE
+   * @return {Promise<PCECoefficient>}
+   */
   public async getPCECoefficient (pce: string): Promise<PCECoefficient> {
     return await this.request(`/e-conso/pce/${pce}/coefficient-profil-mensuel`)
   }
 
   /**
-     * @param {string} pce Numéro du PCE
-     * @param {string} dateFinPeriode Date de fin au format YYYY-MM-DD
-     * @param {number} nbJours Nombre de jours
-     * @return Objet dont les clés sont les dates et les valeurs sont les températures associées
-     */
+   * @param {string} pce Numéro du PCE
+   * @param {string} dateFinPeriode Date de fin au format YYYY-MM-DD
+   * @param {number} nbJours Nombre de jours
+   * @return Objet dont les clés sont les dates et les valeurs sont les températures associées
+   */
   public async getPCEMeteo (pce: string, dateFinPeriode: string, nbJours: number): Promise<{ [date: string]: number }> {
     return await this.request(`/e-conso/pce/${pce}/meteo?${qs.stringify({ dateFinPeriode, nbJours })}`)
   }
 
   /**
-     * Consommation annuelle de référence
-     * @param {string} pce Numéro du PCE
-     * @return {Promise<ConsommationReference[]>}
-     */
+   * Consommation annuelle de référence
+   * @param {string} pce Numéro du PCE
+   * @return {Promise<ConsommationReference[]>}
+   */
   public async getPCEConsoRef (pce: string): Promise<ConsommationReference[]> {
     return await this.request(`/e-conso/pce/${pce}/consommation-anuelle-reference`)
   }
 
   /**
-     * Relevés de consommation
-     * @param {ConsommationType} type informatives: les plus détaillés, publiees: destinées à la facturation
-     * @param {string[]} pceList Liste des numéros de PCE
-     * @param {string} dateDebut Date de début au format YYYY-MM-DD
-     * @param {string} dateFin Date de fin au format YYYY-MM-DD
-     * @return {Promise<Consommation>}
-     */
+   * Relevés de consommation
+   * @param {ConsommationType} type informatives: les plus détaillés, publiees: destinées à la facturation
+   * @param {string[]} pceList Liste des numéros de PCE
+   * @param {string} dateDebut Date de début au format YYYY-MM-DD
+   * @param {string} dateFin Date de fin au format YYYY-MM-DD
+   * @return {Promise<Consommation>}
+   */
   public async getPCEConsumption (type: ConsommationType, pceList: string[], dateDebut: string, dateFin: string): Promise<Consommation> {
     return await this.request(`/e-conso/pce/consommation/informatives?${qs.stringify({
             dateDebut,
@@ -118,14 +120,14 @@ export class GRDF {
   }
 
   /**
-     * Stream d'une feuille de calcul déjà formatée contenant les relevés
-     * @param {ConsommationType} type `informatives`: les plus détaillés, `publiees`: destinées à la facturation
-     * @param {string[]} pceList Liste des numéros de PCE
-     * @param {Frequency} frequence Fréquence des relevés (`Mensuel`|`Hebdomadaire`|`Journalier`|`Horaire`)
-     * @param {string} dateDebut Date de début au format YYYY-MM-DD
-     * @param {string} dateFin Date de fin au format YYYY-MM-DD
-     * @return {Promise<stream>}
-     */
+   * Stream d'une feuille de calcul déjà formatée contenant les relevés
+   * @param {ConsommationType} type `informatives`: les plus détaillés, `publiees`: destinées à la facturation
+   * @param {string[]} pceList Liste des numéros de PCE
+   * @param {Frequency} frequence Fréquence des relevés (`Mensuel`|`Hebdomadaire`|`Journalier`|`Horaire`)
+   * @param {string} dateDebut Date de début au format YYYY-MM-DD
+   * @param {string} dateFin Date de fin au format YYYY-MM-DD
+   * @return {Promise<stream>}
+   */
   public async getConsumptionSheet (type: ConsommationType, pceList: string[], frequence: Frequency, dateDebut: string, dateFin: string): Promise<stream> {
     return await this.request(`/e-conso/pce/consommation/${type}/telecharger?${qs.stringify({
             dateDebut,
@@ -136,68 +138,68 @@ export class GRDF {
   }
 
   /**
-     * Effectuer des changements sur le PCE (changement de l'alias par exemple)
-     * @param {string} pce Numéro du PCE
-     * @param partialPCE Informations à remplacer dans la description du PCE
-     * @return {Promise<PCE>}
-     */
+   * Effectuer des changements sur le PCE (changement de l'alias par exemple)
+   * @param {string} pce Numéro du PCE
+   * @param partialPCE Informations à remplacer dans la description du PCE
+   * @return {Promise<PCE>}
+   */
   public async putPCE (pce: string, partialPCE: Partial<PCE> & { alias: string, role: string }): Promise<PCE> {
     return await this.request(`/e-conso/pce/${pce}`, { method: 'PUT', data: partialPCE })
   }
 
   /**
-     * Liste des seuils programmés
-     * @param {string} pce Numéro du PCE
-     * @param {Frequency} frequence Type de seuil (`Journalier`|`Mensuel`|`Annuel`)
-     * @return {Promise<Seuils>}
-     */
+   * Liste des seuils programmés
+   * @param {string} pce Numéro du PCE
+   * @param {Frequency} frequence Type de seuil (`Journalier`|`Mensuel`|`Annuel`)
+   * @return {Promise<Seuils>}
+   */
   public async getPCESeuils (pce: string, frequence: Frequency): Promise<Seuils> {
     return await this.request(`/e-conso/pce/${pce}/seuils?${qs.stringify({ frequence })}`)
   }
 
   /**
-     * Remplacer les seuils
-     * @param {string} pce Numéro du PCE
-     * @param {Seuils} seuils Seuils à poster
-     * @return {Promise<SeuilsCreated>}
-     */
+   * Remplacer les seuils
+   * @param {string} pce Numéro du PCE
+   * @param {Seuils} seuils Seuils à poster
+   * @return {Promise<SeuilsCreated>}
+    */
   public async postPCESeuils (pce: string, seuils: Seuils): Promise<SeuilsCreated> {
     return await this.request(`/e-conso/pce/${pce}/seuils`, { method: 'POST', data: seuils })
   }
 
   /**
-     * Modifier un seuil (préciser les identifiants)
-     * @param {string} pce Numéro du PCE
-     * @param {Seuils} seuils Seuils à muter
-     * @return {Promise<Seuils>}
-     */
+   * Modifier un seuil (préciser les identifiants)
+   * @param {string} pce Numéro du PCE
+   * @param {Seuils} seuils Seuils à muter
+   * @return {Promise<Seuils>}
+   */
   public async putPCESeuils (pce: string, seuils: Seuils): Promise<Seuils> {
     return await this.request(`/e-conso/pce/${pce}/seuils`, { method: 'PUT', data: seuils })
   }
 
   /**
-     * Informations générales sur l'utilisateur connecté
-     * @return {Promise<UserInfo>}
-     */
+   * Informations générales sur l'utilisateur connecté
+   * @return {Promise<UserInfo>}
+   */
   public async getUserInfo (): Promise<UserInfo> {
     return await this.request('e-connexion/users/whoami')
   }
 
   /**
-     * Détails sur un utilisateur
-     * @param {number} id Identifiant de l'utilisateur
-     * @return {Promise<UserInfo>}
-     */
+   * Détails sur un utilisateur
+   * @param {number} id Identifiant de l'utilisateur
+   * @return {Promise<UserInfo>}
+   */
   public async getUserDetails (id: number): Promise<UserInfo> {
     return await this.request(`e-connexion/users/${id}`)
   }
 
   /**
-     * Mise à jour du profil de l'utilisateur
-     * @param {number} id Identifiant de l'utilisateur
-     * @param {UserInfoDetails} userInfoDetails Les informations de l'utilisateur à modifier
-     * @return {Promise<UserInfo>}
-     */
+   * Mise à jour du profil de l'utilisateur
+   * @param {number} id Identifiant de l'utilisateur
+   * @param {UserInfoDetails} userInfoDetails Les informations de l'utilisateur à modifier
+   * @return {Promise<UserInfo>}
+   */
   public async putUserDetails (id: number, userInfoDetails: UserInfoDetails): Promise<UserInfo> {
     return await this.request(`e-connexion/users/${id}`, {
       method: 'PUT',
@@ -206,41 +208,57 @@ export class GRDF {
   }
 
   /**
-     * Historique de consultation des informations des PCE
-     * @return {Promise<HistoriqueConsultation[]>}
-     */
+   * Historique de consultation des informations des PCE
+   * @return {Promise<HistoriqueConsultation[]>}
+   */
   public async getConsultationHistory (): Promise<HistoriqueConsultation[]> {
     return await this.request('e-connexion/users/pce/historique-consultation')
   }
 
   /**
-     * Mise à jour de la date de dernière consultation du PCE
-     * @param {HistoriqueConsultationRequest} data
-     */
+   * Mise à jour de la date de dernière consultation du PCE
+   * @param {HistoriqueConsultationRequest} data
+   */
   public async putConsultationHistory (data: HistoriqueConsultationRequest): Promise<HistoriqueConsultation[]> {
     return await this.request('e-connexion/users/pce/historique-consultation', { method: 'PUT', data })
   }
 
   /**
-     * Liste des accreditations demandées
-     * @return {Promise<Accreditation[]>}
-     */
+   * Liste des accreditations demandées
+   * @return {Promise<Accreditation[]>}
+   */
   public async getUserAccreditation (): Promise<Accreditation[]> {
     return await this.request('e-connexion/user-accreditations')
   }
 
   /**
-     * Mise à jour de l'accréditation (changement de l'alias par exemple)
-     * @param {string} pce Numéro du PCE
-     * @param partialPCE
-     * @return {Promise<PCE>}
-     */
+   * Mise à jour de l'accréditation (changement de l'alias par exemple)
+   * @param {string} pce Numéro du PCE
+   * @param partialPCE
+   * @return {Promise<PCE>}
+   */
   public async putUserAccreditation (pce: string, partialPCE: Partial<PCE> & { alias: string, role: string }): Promise<PCE> {
     return await this.request(`e-connexion/user-accreditations/${pce}`, { method: 'PUT', data: partialPCE })
   }
 
   public async getUserCompensations (): Promise<object> {
     return await this.request('e-connexion/user-compensations')
+  }
+
+  /**
+   * Informations sur le logement
+   * @return {Promise<InfoLogement[]>}
+   */
+  public async getInfoLogements (): Promise<InfoLogement[]> {
+    return await this.request('e-connexion/info_logements')
+  }
+
+  /**
+   * Informations sur le logement d'un PCE
+   * @return {Promise<InfoLogement>}
+   */
+  public async getInfoLogementPCE (pce: string): Promise<InfoLogement> {
+    return await this.request(`e-connexion/info_logements?${qs.stringify({ pce })}`)
   }
 
   private async request (endpoint: string, axiosConfig: AxiosRequestConfig = {}): Promise<any> {
@@ -265,12 +283,17 @@ export class GRDF {
      * @return {Promise<string>} Le jeton d'accès
      */
   public static async login (email: string, password: string): Promise<string> {
-    const client = axios.create({withCredentials: true})
+    const client = axios.create({ withCredentials: true })
+
+    const authorizeReq = await fetch('https://monespace.grdf.fr/', {
+      redirect: 'manual'
+    })
+
     const authReq = (await client.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', qs.stringify({
       email,
       password,
       capp: 'meg',
-      goto: `https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write%20%2Fdigiraccob2c%2Fv1&client_id=prod_espaceclient&state=%2Fconnexion&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=Ej-Z6hSFJtYgp9CVHJ7bGtkgWuc5WWmD5du3sGjeJZ0&by_pass_okta=1&capp=meg`
+      goto: authorizeReq.headers.get('Location') // URL de redirection avec le nonce
     }), {
       headers: {
         domain: 'grdf.fr'
@@ -283,15 +306,15 @@ export class GRDF {
 
       const authorizeReq = await fetch(redirectUrl, {
         headers: {
-          'Cookie': cookieSofit ?? ''
+          Cookie: cookieSofit ?? ''
         },
         redirect: 'manual'
       })
 
       const codexchUrl = authorizeReq.headers.get('location')
-      if(codexchUrl === null) throw new Error("Impossible d'obtenir l'url de redirection pour obtenir le jeton.")
-      const codexchReqCookies = (await fetch(codexchUrl, {redirect: 'manual'})).headers.get('set-cookie')
-      if(codexchReqCookies === null) throw new Error('Impossible de traiter le cookie de connexion.')
+      if (codexchUrl === null) throw new Error("Impossible d'obtenir l'URL de redirection d'échange de jeton.")
+      const codexchReqCookies = (await fetch(codexchUrl, { redirect: 'manual' })).headers.get('set-cookie')
+      if (codexchReqCookies === null) throw new Error('Impossible de traiter le cookie de connexion.')
       const token = codexchReqCookies.split(';').find(c => c.startsWith('auth_token'))?.split('=')[1]
       if (token !== undefined) {
         await new GRDF(token).getUserInfo().catch(e => e)
