@@ -20,7 +20,9 @@ export { Frequency }
 export { ConsommationType }
 
 /**
- * Support non-officiel de l'API GRDF
+ * Support non-officiel de l'API GRDF.
+ * Ce module permet de gérer et récupérer la consommation des compteurs communicants Gazpar en utilisant l'API du site de GRDF.
+ * Leur site internet étant en perpétuelle mutation, ce module devra être mis à jour régulièrement.
  * @example ```js
  * const { GRDF, ConsommationType } = require('grdf-api')
  * const pce = '01234567890123'
@@ -91,7 +93,10 @@ export class GRDF {
    * @return Objet dont les clés sont les dates et les valeurs sont les températures associées
    */
   public async getPCEMeteo (pce: string, dateFinPeriode: string, nbJours: number): Promise<{ [date: string]: number }> {
-    return await this.request(`/e-conso/pce/${pce}/meteo?${qs.stringify({ dateFinPeriode, nbJours })}`)
+    return await this.request(`/e-conso/pce/${pce}/meteo?${qs.stringify({
+      dateFinPeriode,
+      nbJours
+    })}`)
   }
 
   /**
@@ -113,10 +118,10 @@ export class GRDF {
    */
   public async getPCEConsumption (type: ConsommationType, pceList: string[], dateDebut: string, dateFin: string): Promise<Consommation> {
     return await this.request(`/e-conso/pce/consommation/informatives?${qs.stringify({
-            dateDebut,
-            dateFin,
-            pceList
-        })}`)
+      dateDebut,
+      dateFin,
+      pceList
+    })}`)
   }
 
   /**
@@ -141,11 +146,11 @@ export class GRDF {
    */
   public async getConsumptionSheet (type: ConsommationType, pceList: string[], frequence: Frequency, dateDebut: string, dateFin: string): Promise<stream> {
     return await this.request(`/e-conso/pce/consommation/${type}/telecharger?${qs.stringify({
-            dateDebut,
-            frequence,
-            dateFin,
-            pceList
-        })}`, { responseType: 'stream' })
+      dateDebut,
+      frequence,
+      dateFin,
+      pceList
+    })}`, { responseType: 'stream' })
   }
 
   /**
@@ -155,7 +160,10 @@ export class GRDF {
    * @return {Promise<PCE>}
    */
   public async putPCE (pce: string, partialPCE: Partial<PCE> & { alias: string, role: string }): Promise<PCE> {
-    return await this.request(`/e-conso/pce/${pce}`, { method: 'PUT', data: partialPCE })
+    return await this.request(`/e-conso/pce/${pce}`, {
+      method: 'PUT',
+      data: partialPCE
+    })
   }
 
   /**
@@ -173,9 +181,12 @@ export class GRDF {
    * @param {string} pce Identifiant du PCE
    * @param {Seuils} seuils Seuils à poster
    * @return {Promise<SeuilsCreated>}
-    */
+   */
   public async postPCESeuils (pce: string, seuils: Seuils): Promise<SeuilsCreated> {
-    return await this.request(`/e-conso/pce/${pce}/seuils`, { method: 'POST', data: seuils })
+    return await this.request(`/e-conso/pce/${pce}/seuils`, {
+      method: 'POST',
+      data: seuils
+    })
   }
 
   /**
@@ -185,7 +196,10 @@ export class GRDF {
    * @return {Promise<Seuils>}
    */
   public async putPCESeuils (pce: string, seuils: Seuils): Promise<Seuils> {
-    return await this.request(`/e-conso/pce/${pce}/seuils`, { method: 'PUT', data: seuils })
+    return await this.request(`/e-conso/pce/${pce}/seuils`, {
+      method: 'PUT',
+      data: seuils
+    })
   }
 
   /**
@@ -231,7 +245,10 @@ export class GRDF {
    * @param {HistoriqueConsultationRequest} data
    */
   public async putConsultationHistory (data: HistoriqueConsultationRequest): Promise<HistoriqueConsultation[]> {
-    return await this.request('e-connexion/users/pce/historique-consultation', { method: 'PUT', data })
+    return await this.request('e-connexion/users/pce/historique-consultation', {
+      method: 'PUT',
+      data
+    })
   }
 
   /**
@@ -249,7 +266,10 @@ export class GRDF {
    * @return {Promise<PCE>}
    */
   public async putUserAccreditation (pce: string, partialPCE: Partial<PCE> & { alias: string, role: string }): Promise<PCE> {
-    return await this.request(`e-connexion/user-accreditations/${pce}`, { method: 'PUT', data: partialPCE })
+    return await this.request(`e-connexion/user-accreditations/${pce}`, {
+      method: 'PUT',
+      data: partialPCE
+    })
   }
 
   public async getUserCompensations (): Promise<object> {
@@ -273,7 +293,10 @@ export class GRDF {
   }
 
   private async request (endpoint: string, axiosConfig: AxiosRequestConfig = {}): Promise<any> {
-    const { data, headers } = await axios.request({
+    const {
+      data,
+      headers
+    } = await axios.request({
       baseURL: 'https://monespace.grdf.fr/api',
       url: endpoint,
       ...axiosConfig,
@@ -287,12 +310,13 @@ export class GRDF {
   }
 
   /**
-     * Obtention d'un jeton d'accès auprès de l'API
-     * @param {string} email Courriel de connexion de l'utilisateur
-     * @param {string} password Mot de passe
-     * @static
-     * @return {Promise<string>} Le jeton d'accès
-     */
+   * Obtention d'un jeton d'accès auprès de l'API
+   * Attention: ne JAMAIS transmettre ce jeton à un tier, il vous est strictement personnel !
+   * @param {string} email Courriel de connexion de l'utilisateur
+   * @param {string} password Mot de passe
+   * @static
+   * @return {Promise<string>} Le jeton d'accès
+   */
   public static async login (email: string, password: string): Promise<string> {
     const client = axios.create({ withCredentials: true })
 
@@ -311,7 +335,12 @@ export class GRDF {
       }
     }))
 
-    const { redirectUrl, displayCaptcha, state, actualLockoutDuration } = authReq.data as AuthResponse
+    const {
+      redirectUrl,
+      displayCaptcha,
+      state,
+      actualLockoutDuration
+    } = authReq.data as AuthResponse
     if (!displayCaptcha && state === 'SUCCESS' && actualLockoutDuration === 0 && redirectUrl !== undefined) {
       const cookieSofit = authReq.headers['set-cookie']?.find(c => c.startsWith('CookieSofit'))?.split(';')[0]
 

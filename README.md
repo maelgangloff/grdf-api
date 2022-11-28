@@ -1,7 +1,9 @@
 <a name="GRDF"></a>
 
 ## GRDF
-Support non-officiel de l'API GRDF
+Support non-officiel de l'API GRDF.
+Ce module permet de gérer et récupérer la consommation des compteurs communicants Gazpar en utilisant l'API du site de GRDF.
+Leur site internet étant en perpétuelle mutation, ce module devra être mis à jour régulièrement.
 
 **Kind**: global class  
 
@@ -288,6 +290,7 @@ Informations sur le logement d'un PCE
 
 ### GRDF.login(email, password) ⇒ <code>Promise.&lt;string&gt;</code>
 Obtention d'un jeton d'accès auprès de l'API
+Attention: ne JAMAIS transmettre ce jeton à un tier, il vous est strictement personnel !
 
 **Kind**: static method of [<code>GRDF</code>](#GRDF)  
 **Returns**: <code>Promise.&lt;string&gt;</code> - Le jeton d'accès  
