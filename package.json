@@ -7,7 +7,7 @@
     "name": "Maël GANGLOFF",
     "email": "contact@maelgangloff.fr"
   },
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/node": "^17.0.5",
     "@types/qs": "^6.9.7",
