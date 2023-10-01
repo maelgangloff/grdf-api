@@ -1,7 +1,7 @@
 <a name="GRDF"></a>
 
 ## GRDF
-## $\text{\color{red}{!!! This library is broken since CAPTCHA is mandatory on GrDF site !!!}}$
+$\text{\color{red}{!!! This library is broken since CAPTCHA is mandatory on GrDF site !!!}}$
 Support non-officiel de l'API GRDF.
 Ce module permet de gérer et récupérer la consommation des compteurs communicants Gazpar en utilisant l'API du site de GRDF.
 Leur site internet étant en perpétuelle mutation, ce module devra être mis à jour régulièrement.
