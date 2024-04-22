@@ -1,8 +1,6 @@
 <a name="GRDF"></a>
 
 ## GRDF
-$\text{\color{red}{!!! This library is broken since CAPTCHA is mandatory on GrDF site !!!}}$
-
 Support non-officiel de l'API GRDF.
 Ce module permet de gérer et récupérer la consommation des compteurs communicants Gazpar en utilisant l'API du site de GRDF.
 Leur site internet étant en perpétuelle mutation, ce module devra être mis à jour régulièrement.
@@ -12,7 +10,7 @@ Leur site internet étant en perpétuelle mutation, ce module devra être mis à
 * [GRDF](#GRDF)
     * [new GRDF(token)](#new_GRDF_new)
     * _instance_
-        * [.getPCEList()](#GRDF+getPCEList) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
+        * [.getPCEList(details)](#GRDF+getPCEList) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
         * [.getPCEAddress(pce)](#GRDF+getPCEAddress) ⇒ <code>Promise.&lt;Adresse&gt;</code>
         * [.getPCEDetails(pce)](#GRDF+getPCEDetails) ⇒ <code>Promise.&lt;PCE&gt;</code>
         * ~~[.getPCEDetailsPlus()](#GRDF+getPCEDetailsPlus) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>~~
@@ -57,10 +55,15 @@ GRDF.login('email', 'password').then(async token => {
 ```
 <a name="GRDF+getPCEList"></a>
 
-### grdF.getPCEList() ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
+### grdF.getPCEList(details) ⇒ <code>Promise.&lt;Array.&lt;PCE&gt;&gt;</code>
 Liste des PCE associés à l'utilisateur
 
 **Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| details | <code>boolean</code> | <code>true</code> | Récupérer les détails |
+
 <a name="GRDF+getPCEAddress"></a>
 
 ### grdF.getPCEAddress(pce) ⇒ <code>Promise.&lt;Adresse&gt;</code>
