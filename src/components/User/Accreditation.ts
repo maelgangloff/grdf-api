@@ -7,7 +7,7 @@ export interface Accreditation {
   role: string
   delai_avant_archivage: string
   parametres_enrichissement: {
-    DATEFINPERIODE: string
+    DATEFINPERIODE: string|null
     CODEPOSTAL: string
     DL: string
     TELERELEVE: string
@@ -17,7 +17,7 @@ export interface Accreditation {
     PCE: string
     NUMEROSERIE: string
     RAISONSOCIALEERRONEE: string
-    MHS: string
+    MHS: string|null
     MES: string
     MATRICULECOMPTEUR: string
     TARIF: string
@@ -27,7 +27,7 @@ export interface Accreditation {
   }
   parametres_verification: {
     CODEPOSTAL: string
-    DATEPREMIERACC?: string
+    DATEPREMIERACC?: string|null
     NOMTITULAIRE: string
   }
   donnees_techniques: {

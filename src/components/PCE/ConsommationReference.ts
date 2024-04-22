@@ -2,25 +2,6 @@ export interface ConsommationReference {
   id: number
   consommationType: string
   profile: string
-  tranche: {
-    id: number
-    name: string
-    min: number
-    max: number
-    createdAt: string
-    updatedAt: string
-    __initializer__: null
-    __cloner__: null
-    __isInitialized__: boolean
-  }
-  stationMeteo: {
-    code: string
-    createdAt: string
-    updatedAt: string
-    __initializer__: null
-    __cloner__: null
-    __isInitialized__: boolean
-  }
   annee: number
   mois1: string
   mois2: string
@@ -34,6 +15,5 @@ export interface ConsommationReference {
   mois10: string
   mois11: string
   mois12: string
-  createdAt: string
-  updatedAt: string
+  unite: string
 }

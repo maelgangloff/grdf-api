@@ -16,7 +16,7 @@ import { InfoLogement } from './components/User/InfoLogement'
 import { OktaAuth } from '@okta/okta-auth-js'
 import { wrapper } from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-
+import { HTMLResponseError } from './components/Errors/HTMLResponseError'
 export { Frequency }
 export { ConsommationType }
 
@@ -48,10 +48,11 @@ export class GRDF {
 
   /**
    * Liste des PCE associés à l'utilisateur
+   * @param {boolean} details Récupérer les détails
    * @return {Promise<PCE[]>}
    */
-  public async getPCEList (): Promise<PCE[]> {
-    return await this.request('/e-conso/pce')
+  public async getPCEList (details = true): Promise<PCE[]> {
+    return await this.request('/e-conso/pce?' + qs.stringify({ details }))
   }
 
   /**
@@ -296,10 +297,7 @@ export class GRDF {
   }
 
   private async request (endpoint: string, axiosConfig: AxiosRequestConfig = {}): Promise<any> {
-    const {
-      data,
-      headers
-    } = await axios.request({
+    const config = {
       baseURL: 'https://monespace.grdf.fr/api',
       url: endpoint,
       ...axiosConfig,
@@ -307,9 +305,18 @@ export class GRDF {
         domain: 'grdf.fr',
         Cookie: `auth_token=${this.token}`
       }
-    })
-    if (headers['content-type'].includes('text/html')) throw new Error('Useless HTML response')
-    return data
+    }
+    try {
+      const { data, headers } = await axios.request(config)
+      if (headers['content-type'].includes('text/html')) throw new HTMLResponseError()
+      return data
+    } catch (e) {
+      if (!(e instanceof HTMLResponseError)) throw e
+
+      const { data, headers } = await axios.request(config)
+      if (headers['content-type'].includes('text/html')) throw new HTMLResponseError()
+      return data
+    }
   }
 
   /**
