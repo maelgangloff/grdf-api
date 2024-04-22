@@ -12,7 +12,7 @@ authors:
 identifiers:
   - type: url
     value: >-
-      https://github.com/maelgangloff/grdf-api/releases/tag/0.2.0
+      https://github.com/maelgangloff/grdf-api/releases/tag/v0.2.0
     description: Release v0.2.0 of grdf-api
 repository-code: 'https://github.com/maelgangloff/grdf-api'
 abstract: Unofficial API client of GRDF
