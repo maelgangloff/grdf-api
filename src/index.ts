@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import qs from 'qs'
-import fetch from 'node-fetch'
-import AuthResponse from './components/Auth/AuthResponse'
 import { UserInfo } from './components/User/UserInfo'
 import { UserInfoDetails } from './components/User/UserInfoDetails'
 import { PCE } from './components/PCE/PCE'
@@ -15,6 +13,9 @@ import { HistoriqueConsultation, HistoriqueConsultationRequest } from './compone
 import { Seuils, SeuilsCreated } from './components/PCE/Seuils'
 import { Accreditation } from './components/User/Accreditation'
 import { InfoLogement } from './components/User/InfoLogement'
+import { OktaAuth } from '@okta/okta-auth-js'
+import { wrapper } from 'axios-cookiejar-support'
+import { CookieJar } from 'tough-cookie'
 
 export { Frequency }
 export { ConsommationType }
@@ -320,49 +321,28 @@ export class GRDF {
    * @return {Promise<string>} Le jeton d'accès
    */
   public static async login (email: string, password: string): Promise<string> {
-    const client = axios.create({ withCredentials: true })
+    const authClient = new OktaAuth({
+      issuer: 'https://connexion.grdf.fr/oauth2/aus5y2ta2uEHjCWIR417',
+      clientId: '0oa95ese18blzdg3p417',
+      redirectUri: 'https://monespace.grdf.fr/_codexch',
+      scopes: ['openid', 'profile', 'email']
 
-    const authorizeReq = await fetch('https://monespace.grdf.fr/', {
-      redirect: 'manual'
+    })
+    const transaction = await authClient.signIn({
+      username: email,
+      password: password
     })
 
-    const authReq = (await client.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', qs.stringify({
-      email,
-      password,
-      capp: 'meg',
-      goto: authorizeReq.headers.get('Location') // URL de redirection avec le nonce
-    }), {
-      headers: {
-        domain: 'grdf.fr'
-      }
-    }))
+    const jar = new CookieJar()
 
-    const {
-      redirectUrl,
-      displayCaptcha,
-      state,
-      actualLockoutDuration
-    } = authReq.data as AuthResponse
-    if (!displayCaptcha && state === 'SUCCESS' && actualLockoutDuration === 0 && redirectUrl !== undefined) {
-      const cookieSofit = authReq.headers['set-cookie']?.find(c => c.startsWith('CookieSofit'))?.split(';')[0]
-
-      const authorizeReq = await fetch(redirectUrl, {
-        headers: {
-          Cookie: cookieSofit ?? ''
-        },
-        redirect: 'manual'
-      })
-
-      const codexchUrl = authorizeReq.headers.get('location')
-      if (codexchUrl === null) throw new Error('Failed to get token exchange redirect URL.')
-      const codexchReqCookies = (await fetch(codexchUrl, { redirect: 'manual' })).headers.get('set-cookie')
-      if (codexchReqCookies === null) throw new Error('Unable to process login cookie.')
-      const token = codexchReqCookies.split(';').find(c => c.startsWith('auth_token'))?.split('=')[1]
-      if (token !== undefined) {
-        await new GRDF(token).getUserInfo().catch(e => e)
-        return token
-      }
-    }
-    throw new Error('Invalid credentials or captcha required.')
+    const httpClient = wrapper(axios.create({ withCredentials: true, jar }))
+    await httpClient.get(authClient.getIssuerOrigin() + `/login/sessionCookieRedirect?${qs.stringify({
+      checkAccountSetupComplete: true,
+      token: transaction.sessionToken,
+      redirectUrl: 'https://monespace.grdf.fr'
+    })}`)
+    const cookie = (await jar.getCookies('https://monespace.grdf.fr')).find(c => c.key === 'auth_token')
+    if (cookie === undefined) throw new Error("Impossible de récupérer le cookie d'authentification.")
+    return cookie.value
   }
 }
