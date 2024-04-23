@@ -34,6 +34,11 @@
     "Gazpar",
     "Gaz"
   ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src/ --ext .ts",
+    "doc": "jsdoc2md --template docs/README.hbs -f dist/index.js > README.md"
+  },
   "description": "Unofficial API client of GRDF",
   "dependencies": {
     "@okta/okta-auth-js": "^7.5.1",
