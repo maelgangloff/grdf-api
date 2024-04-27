@@ -19,28 +19,33 @@ export interface Consommation {
       volumeBrutConsomme: number
       energieConsomme: number
       /**
-       * Pouvoir Calorifique Supérieur du Gaz.
+       * PCS : Pouvoir Calorifique Supérieur du Gaz.
        * Il s'agit de la « quantité d'énergie dégagée par la combustion complète d'une unité de combustible, la vapeur d'eau étant supposée condensée et la chaleur récupérée ».
        */
-      pcs: any
+      pcs: string|number|null
       /**
        * Volume de gaz consommé sur la période en conditions normales, c'est à dire sous une pression de 1 bar et une température de 0°C.
        */
       volumeConverti: number|null
       /**
-       * Coefficient lié aux conditions de température, pression et altitude au moment du relevé
+       * PTA : Pression Température Altitude.
+       * Coefficient lié aux conditions de température, pression et altitude au moment du relevé.
        */
-      pta: any
+      pta: string|number|null
+      /**
+       * - Publiée : Données de consommation journalières individuelles (uniquement pour les compteurs 1M et les MM).
+       * - Informative Journalier : Données de consommation individuelles envoyées aux fournisseurs et permettant la facturation.
+       */
       natureReleve: 'Publiée' | 'Informative Journalier' | string
       qualificationReleve: 'Estimé' | 'Mesuré' | 'Absence de Données' | string
-      status: any
+      status: string|null
       /**
        * Coefficient produit du PTA et du PCS, calculé suivant la valeur moyenne sur la période de consommation.
        */
       coeffConversion: number
-      frequenceReleve: any
-      temperature: any
+      frequenceReleve: string|null
+      temperature: string|number|null
     }>
-    frequence: any
+    frequence: string|null
   }
 }

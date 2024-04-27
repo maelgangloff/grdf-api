@@ -10,8 +10,8 @@ export interface UserInfo {
   espace: {
     id: number
     mobile_phone: string
-    validated_mobile_phone: any
-    mobile_phone_expiration_date: any
+    validated_mobile_phone: string|null
+    mobile_phone_expiration_date: string|null
     home_phone: string
     notification_info_coupure_sms: boolean
     notification_info_coupure_email: boolean

@@ -32,9 +32,9 @@ export interface Accreditation {
   }
   donnees_techniques: {
     alias: string
-    canal_creation: any
-    application: any
-    id_internaute_referentiel: any
+    canal_creation: string|null
+    application: string|null
+    id_internaute_referentiel: string|null
     date_creation: string
     date_premiere_accreditation: string|null
     date_suppression: string|null
@@ -53,12 +53,12 @@ export interface Accreditation {
     origine_passage_a_refuse: string|null
     source_passage_a_refuse: string|null
   }
-  parametres_validation: any
+  parametres_validation: string|null
   informations_complementaires: {
     POURACCRED_DENOMINATION: string
     ID_ESPACE_PERSO_ACCRED: string
     CODE_TYPE_RESIDENCE: string
     SEQ: string
   }|[]
-  donnees_controle: any
+  donnees_controle: string|null
 }
