@@ -8,8 +8,14 @@ import { Contrat } from './Contrat'
 export interface PCE {
   idObject: string
   role: string
+  /**
+   * Identification du compteur choisi par le client
+   */
   alias: string
   teleReleve: boolean
+  /**
+   * Point de Comptage et d'Estimation (identification du compteur)
+   */
   pce: string
   dateActivation: string
   dateMhs: string|null
@@ -22,6 +28,13 @@ export interface PCE {
   frequenceMMOrJJ?: boolean
   numeroSerie?: string
   numeroMatricule?: string
+  /**
+   * Il existe plusieurs fréquences de relève pour les compteurs :
+   * - 6M : Relevé semestriel par un technicien GRDF
+   * - 1M : Relevé mensuel
+   * - MM : Relevé mensuel des clients « haut de portefeuille »
+   * - JJ : Relevé journalier des plus gros clients « haut de portefeuille »
+   */
   frequenceReleve: '6M' | '1M' | 'MM' | 'JJ'
   etat: string
   datePremiereAccreditation: string
@@ -34,6 +47,9 @@ export interface PCE {
       codeDebit: string
       frequence: string
       idPitd: string
+      /**
+       * PITD : Point d’Interface Transport et Distribution
+       */
       libellePitd: string
       clientSensibleMig: string
       proprieteCompteur: string
@@ -42,13 +58,18 @@ export interface PCE {
       proprieteEnregistreur: string|null
       roues: number
       debit: string
-      pressionAval: string | object | null
+      /**
+       * La pression de livraison du gaz en bar
+       */
+      pressionAval: string | null
+
       numeroRue: string|null,
       nomRue: string|null,
       complementAdresse: string|null,
       codePostal: string|null,
       codeInseeCommune: string|null,
       commune: string|null,
+
       situationCompteur: string|null,
       accessibiliteCompteur: string|null,
       reperageRobinetGaz: string|null,
