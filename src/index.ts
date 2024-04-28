@@ -307,6 +307,7 @@ export class GRDF {
 
   /**
    * Obtention d'un jeton d'accès auprès de l'API
+   *
    * Attention: ne JAMAIS transmettre ce jeton à un tier, il vous est strictement personnel !
    * @param {string} email Courriel de connexion de l'utilisateur
    * @param {string} password Mot de passe

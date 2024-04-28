@@ -1,5 +1,9 @@
 export interface PCECoefficient {
   id: number
+  /**
+   * Profil Type de consommation
+   * @see profil
+   */
   profil: string
   mois1: number
   mois2: number
