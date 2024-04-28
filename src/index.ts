@@ -1,24 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import qs from 'qs'
-import { UserInfo } from './components/User/UserInfo'
-import { UserInfoDetails } from './components/User/UserInfoDetails'
-import { PCE } from './components/PCE/PCE'
-import { Adresse } from './components/PCE/Adresse'
-import { PCECoefficient } from './components/PCE/Coefficient'
-import { ConsommationReference } from './components/PCE/ConsommationReference'
-import { Consommation, ConsommationType } from './components/PCE/Consommation'
-import { Frequency } from './components/PCE/Frequency'
 import stream from 'node:stream'
-import { HistoriqueConsultation, HistoriqueConsultationRequest } from './components/User/HistoriqueConsultation'
-import { Seuils, SeuilsCreated } from './components/PCE/Seuils'
-import { Accreditation } from './components/User/Accreditation'
-import { InfoLogement } from './components/User/InfoLogement'
 import { OktaAuth } from '@okta/okta-auth-js'
 import { wrapper } from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
-import { HTMLResponseError } from './components/Errors/HTMLResponseError'
-export { Frequency }
-export { ConsommationType }
+
+import { UserInfo } from './components/User/UserInfo'
+import { PCE, Adresse, Consommation, ConsommationReference, ConsommationType, Frequency, PCECoefficient, Seuils, SeuilsCreated } from './components/PCE'
+import { Accreditation, HistoriqueConsultation, HistoriqueConsultationRequest, InfoLogement } from './components/User'
+
+import { HTMLResponseError } from './components/Errors'
 
 /**
  * @example ```js
@@ -224,7 +215,7 @@ export class GRDF {
    * @param {UserInfoDetails} userInfoDetails Les informations de l'utilisateur à modifier
    * @return {Promise<UserInfo>}
    */
-  public async putUserDetails (id: number, userInfoDetails: UserInfoDetails): Promise<UserInfo> {
+  public async putUserDetails (id: number, userInfoDetails: UserInfo): Promise<UserInfo> {
     return await this.request(`e-connexion/users/${id}`, {
       method: 'PUT',
       data: userInfoDetails
@@ -348,3 +339,6 @@ export class GRDF {
     return cookie.value
   }
 }
+
+export { Frequency }
+export { ConsommationType }
