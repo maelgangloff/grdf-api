@@ -107,7 +107,7 @@ export class GRDF {
    * @return {Promise<Consommation>}
    */
   public async getPCEConsumption (type: ConsommationType, pceList: string[], dateDebut: string, dateFin: string): Promise<Consommation> {
-    return await this.request(`/e-conso/pce/consommation/informatives?${qs.stringify({
+    return await this.request(`/e-conso/pce/consommation/${type}?${qs.stringify({
       dateDebut,
       dateFin,
       pceList
