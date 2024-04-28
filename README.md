@@ -312,6 +312,7 @@ Informations sur le logement d'un PCE
 
 ### GRDF.login(email, password) ⇒ <code>Promise.&lt;string&gt;</code>
 Obtention d'un jeton d'accès auprès de l'API
+
 Attention: ne JAMAIS transmettre ce jeton à un tier, il vous est strictement personnel !
 
 **Kind**: static method of [<code>GRDF</code>](#GRDF)  
