@@ -6,7 +6,7 @@ import { wrapper } from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 
 import { UserInfo } from './components/User/UserInfo'
-import { PCE, Adresse, Consommation, ConsommationReference, ConsommationType, Frequency, PCECoefficient, Seuils, SeuilsCreated } from './components/PCE'
+import { PCE, Adresse, Consommation, ConsommationReference, ConsommationType, Frequency, PCECoefficient, Seuils, SeuilsCreated, ConnaissancesClient } from './components/PCE'
 import { Accreditation, HistoriqueConsultation, HistoriqueConsultationRequest, InfoLogement } from './components/User'
 
 import { HTMLResponseError } from './components/Errors'
@@ -252,7 +252,7 @@ export class GRDF {
   /**
    * Mise à jour de l'accréditation (changement de l'alias par exemple)
    * @param {string} pce Identifiant du PCE
-   * @param partialPCE
+   * @param partialPCE L'objet PCE revendiqué
    * @return {Promise<PCE>}
    */
   public async putUserAccreditation (pce: string, partialPCE: Partial<PCE> & { alias: string, role: string }): Promise<PCE> {
@@ -276,10 +276,30 @@ export class GRDF {
 
   /**
    * Informations sur le logement d'un PCE
+   * @param {string} pce Identifiant PCE
    * @return {Promise<InfoLogement>}
    */
   public async getInfoLogementPCE (pce: string): Promise<InfoLogement> {
     return await this.request(`e-connexion/info_logements?${qs.stringify({ pce })}`)
+  }
+
+  /**
+   * Informations sur le client (type de logement, surface, mode de chauffage, etc.)
+   * @param {string} pce Identifiant PCE
+   * @returns {Promise<ConnaissancesClient>}
+   */
+  public async getConnaissancesClient (pce: string): Promise<ConnaissancesClient> {
+    return await this.request(`e-connexion/connaissances-client/${pce}`)
+  }
+
+  /**
+   * Mettre à jour le formulaire de connaissances client (type de logement, surface, mode de chauffage, etc.)
+   * @param {number} id Identifiant du formulaire
+   * @param {ConnaissancesClient} data Données partielles à mettre à jour dans le formulaire
+   * @returns {Promise<ConnaissancesClient>}
+   */
+  public async patchConnaissancesClient (id: number, data: ConnaissancesClient): Promise<ConnaissancesClient> {
+    return await this.request(`e-connexion/connaissances-client/${id}`, { method: 'PATCH', data })
   }
 
   private async request (endpoint: string, axiosConfig: AxiosRequestConfig = {}): Promise<any> {
