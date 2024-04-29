@@ -1,0 +1,30 @@
+name: Publier sur npmjs.com
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+     contents: read
+     id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Lint
+        run: npx eslint src/ --ext .ts
+
+      - name: Build
+        run: npx tsc
+
+      - name: Publish
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
