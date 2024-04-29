@@ -48,7 +48,9 @@ Ce module permet de gérer et récupérer la consommation des compteurs communic
         * [.getUserAccreditation()](#GRDF+getUserAccreditation) ⇒ <code>Promise.&lt;Array.&lt;Accreditation&gt;&gt;</code>
         * [.putUserAccreditation(pce, partialPCE)](#GRDF+putUserAccreditation) ⇒ <code>Promise.&lt;PCE&gt;</code>
         * [.getInfoLogements()](#GRDF+getInfoLogements) ⇒ <code>Promise.&lt;Array.&lt;InfoLogement&gt;&gt;</code>
-        * [.getInfoLogementPCE()](#GRDF+getInfoLogementPCE) ⇒ <code>Promise.&lt;InfoLogement&gt;</code>
+        * [.getInfoLogementPCE(pce)](#GRDF+getInfoLogementPCE) ⇒ <code>Promise.&lt;InfoLogement&gt;</code>
+        * [.getConnaissancesClient(pce)](#GRDF+getConnaissancesClient) ⇒ <code>Promise.&lt;ConnaissancesClient&gt;</code>
+        * [.patchConnaissancesClient(id, data)](#GRDF+patchConnaissancesClient) ⇒ <code>Promise.&lt;ConnaissancesClient&gt;</code>
     * _static_
         * [.login(email, password)](#GRDF.login) ⇒ <code>Promise.&lt;string&gt;</code>
 
@@ -294,7 +296,7 @@ Mise à jour de l'accréditation (changement de l'alias par exemple)
 | Param | Type | Description |
 | --- | --- | --- |
 | pce | <code>string</code> | Identifiant du PCE |
-| partialPCE |  |  |
+| partialPCE |  | L'objet PCE revendiqué |
 
 <a name="GRDF+getInfoLogements"></a>
 
@@ -304,10 +306,38 @@ Informations sur le logement
 **Kind**: instance method of [<code>GRDF</code>](#GRDF)  
 <a name="GRDF+getInfoLogementPCE"></a>
 
-### grdF.getInfoLogementPCE() ⇒ <code>Promise.&lt;InfoLogement&gt;</code>
+### grdF.getInfoLogementPCE(pce) ⇒ <code>Promise.&lt;InfoLogement&gt;</code>
 Informations sur le logement d'un PCE
 
 **Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Identifiant PCE |
+
+<a name="GRDF+getConnaissancesClient"></a>
+
+### grdF.getConnaissancesClient(pce) ⇒ <code>Promise.&lt;ConnaissancesClient&gt;</code>
+Informations sur le client (type de logement, surface, mode de chauffage, etc.)
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pce | <code>string</code> | Identifiant PCE |
+
+<a name="GRDF+patchConnaissancesClient"></a>
+
+### grdF.patchConnaissancesClient(id, data) ⇒ <code>Promise.&lt;ConnaissancesClient&gt;</code>
+Mettre à jour le formulaire de connaissances client (type de logement, surface, mode de chauffage, etc.)
+
+**Kind**: instance method of [<code>GRDF</code>](#GRDF)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | Identifiant du formulaire |
+| data | <code>ConnaissancesClient</code> | Données partielles à mettre à jour dans le formulaire |
+
 <a name="GRDF.login"></a>
 
 ### GRDF.login(email, password) ⇒ <code>Promise.&lt;string&gt;</code>

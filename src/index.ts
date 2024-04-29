@@ -5,9 +5,8 @@ import { OktaAuth } from '@okta/okta-auth-js'
 import { wrapper } from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 
-import { UserInfo } from './components/User/UserInfo'
 import { PCE, Adresse, Consommation, ConsommationReference, ConsommationType, Frequency, PCECoefficient, Seuils, SeuilsCreated, ConnaissancesClient } from './components/PCE'
-import { Accreditation, HistoriqueConsultation, HistoriqueConsultationRequest, InfoLogement } from './components/User'
+import { Accreditation, HistoriqueConsultation, HistoriqueConsultationRequest, InfoLogement, UserInfo } from './components/User'
 
 import { HTMLResponseError } from './components/Errors'
 
