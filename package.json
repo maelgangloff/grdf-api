@@ -10,9 +10,9 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/node": "^17.0.5",
+    "@types/node-fetch": "^2.6.2",
     "@types/qs": "^6.9.7",
     "@types/tough-cookie": "^4.0.5",
-    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
     "eslint": "^7.30.0",
