@@ -8,7 +8,7 @@ Support non-officiel de l'API GRDF.
 Ce module permet de gérer et récupérer la consommation des compteurs communicants Gazpar en utilisant l'API du site de GRDF. Leur site internet étant en perpétuelle mutation, ce module devra être mis à jour régulièrement.
 
 > [!TIP]
-> [Un wiki est disponible](https://github.com/maelgangloff/grdf-api/wiki), celui-ci rassemble davantage d'informations sur le fonctionnement de l'API.
+> Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonctionnement de l'API. **[Ce wiki est disponible ici](https://github.com/maelgangloff/grdf-api/wiki).**
 
 > [!WARNING]
 > ## Disclaimer
