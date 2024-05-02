@@ -4,6 +4,10 @@
 ![GitHub CI](https://github.com/maelgangloff/grdf-api/actions/workflows/CI.yml/badge.svg)
 [![npm](https://img.shields.io/npm/dm/grdf-api?style=flat-square)](https://npm-stat.com/charts.html?package=grdf-api)
 
+<p align="center">
+  <img src="https://github.com/maelgangloff/grdf-api/assets/51171251/9eef82da-9965-47d3-8202-9bcc7c74f79b" width="640" height="320" />
+</p>
+
 Support non-officiel de l'API GRDF.  
 Ce module permet de gérer et récupérer la consommation des compteurs communicants Gazpar en utilisant l'API du site de GRDF. Leur site internet étant en perpétuelle mutation, ce module devra être mis à jour régulièrement.
 
@@ -11,8 +15,8 @@ Ce module permet de gérer et récupérer la consommation des compteurs communic
 > Un wiki est disponible, celui-ci rassemble davantage d'informations sur le fonctionnement de l'API.  
 > **[Ce wiki est disponible ici](https://github.com/maelgangloff/grdf-api/wiki).**
 
+## Disclaimer
 > [!WARNING]
-> ## Disclaimer
 > - Il est clairement mentionné que cette librairie n'est pas officiellement éditée par GRDF.
 > - Ce module n'est pas une contrefaçon car il n'existe pas de module similaire édité officiellement.
 > - Les utilisateurs ne peuvent accéder qu'à leurs propres données. Ils sont soumis au même processus d'authentification que celui implémenté dans l'espace client GRDF et imposé par le serveur API.
