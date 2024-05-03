@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/dm/grdf-api?style=flat-square)](https://npm-stat.com/charts.html?package=grdf-api)
 
 <p align="center">
-  <img src="https://github.com/maelgangloff/grdf-api/assets/51171251/9eef82da-9965-47d3-8202-9bcc7c74f79b" width="640" height="320" />
+  <img src="https://github.com/maelgangloff/grdf-api/assets/51171251/9eef82da-9965-47d3-8202-9bcc7c74f79b" width="640" />
 </p>
 
 Support non-officiel de l'API GRDF.  
